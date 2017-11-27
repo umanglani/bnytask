@@ -49,6 +49,7 @@ export const BuildTree = (ele, date) => {
   const root = d3.hierarchy(data)
     .eachBefore( (d) => { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name })
     .sum((d) => { return d.value })
+    .sort( (a,b) => { return b.value - a.value })
   
   treeMap(root)
   
@@ -118,8 +119,11 @@ export const BuildTree = (ele, date) => {
     // avoid the ferquent mouse over event which can cause loss of data
     if (!currentNode) return
 
-    divTooltip.style("left", d3.event.pageX + 10 + "px")
-    divTooltip.style("top", d3.event.pageY - 20 + "px")
+    const pageX = d3.event.pageX > 1110 ? d3.event.pageX - 370 : d3.event.pageX
+    const pageY = d3.event.pageY > 640 ? d3.event.pageY - 85 : d3.event.pageY
+
+    divTooltip.style("left", pageX + 10 + "px")
+    divTooltip.style("top", pageY - 10 + "px")
     divTooltip.style("display", "inline-block")
     divTooltip.html(
       ` <div class='tooltip'>
